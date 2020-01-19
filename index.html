@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Music Player</title>
+    <link rel="stylesheet" type="text/css" href="index.css"/>
+  </head>
+  <body>
+    <div class="nav">
+      <h1 id='playing'>Pick a song to play<h1>
+    </div>
+    <div class="main" id='info'>
+      <audio id='player' controls loop>
+        The music player failed to load. This is unusual.
+      </audio>
+      <hr>
+      <form>
+        <label for='filepicker'>
+          <button id="filepicker" type>Choose Your Music</button>
+          <!-- add webkitdirectory attribute to input to target only directories-->
+          <!-- <input id='filepicker' type='file'>Upload a file</input> --> 
+        </label>
+      </form>
+    </div>
+  </body>
+  <script src='./renderer.js'></script>
+</html>

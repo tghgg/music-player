@@ -1,0 +1,30 @@
+{
+  "name": "minimal-music-player",
+  "version": "1.0.0",
+  "description": "Minimalist music player",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "Minimal Music Player",
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": "NSIS"
+    }
+  },
+  "author": "Choppa2",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^7.1.9",
+    "electron-builder": "^22.2.0"
+  }
+}
