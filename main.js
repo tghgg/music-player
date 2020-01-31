@@ -1,10 +1,9 @@
 const { app, BrowserWindow, ipcMain, dialog, Menu, MenuItem } = require('electron');
-
+const process = require('process');
 // Declare app's windows
 let mainWindow;
-
+// Declare app's menus
 let menu; 
-
 let init_menu = [
 	// Show play history and allow user to play a past song
 	{
@@ -12,7 +11,6 @@ let init_menu = [
 		id: 'history',
 		submenu: []
 	},
-
 	// About box
 	{
 		label: 'About',
@@ -24,31 +22,28 @@ let init_menu = [
 			});
 		}
 	}, 
-	
 	// Quit
 	{
 		label: 'Quit',
 		role: 'quit'
 	}
 ];
-
 // Create main window
 app.on('ready', () => {
 	menu = Menu.buildFromTemplate(init_menu);
 	Menu.setApplicationMenu(menu);
 	mainWindow = new BrowserWindow(
 		{
-			width: 500,
-			height: 300,
+			width: 800,
+			height: 600,
 			show: true,
 			webPreferences: {nodeIntegration: true},
 			enableRemoteModule: false
 		}
 	); 
 	mainWindow.loadFile(__dirname + '/index.html');
-	//mainWindow.webContents.openDevTools();
+	mainWindow.webContents.openDevTools();
 });
-
 // Open a file picker dialog
 ipcMain.on('pick_file', (event, data) => {
 	dialog.showOpenDialog({
@@ -60,12 +55,12 @@ ipcMain.on('pick_file', (event, data) => {
 				label: file_object.filePaths[0].split('/')[file_object.filePaths[0].split('/').length-1],
 				click: (menuItem, window, event) => {
 					// Play the song
-					mainWindow.webContents.send('selected_files', file_object.filePaths);		
+					mainWindow.webContents.send('selected_files', {file_path: file_object.filePaths, platform: process.platform});		
 				}
 			}
 		));
 		// Send back the selected files to the renderer process
-		event.reply('selected_files', file_object.filePaths);
+		event.reply('selected_files', {file_path: file_object.filePaths, platform: process.platform});
 	}, (err) => {
 		dialog.showMessageBox({
 			title: 'Error',
