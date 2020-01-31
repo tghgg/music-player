@@ -1,6 +1,6 @@
 {
   "name": "minimal-music-player",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Minimalist music player",
   "main": "main.js",
   "scripts": {
@@ -24,7 +24,7 @@
   "author": "Choppa2",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^7.1.9",
+    "electron": "^7.1.10",
     "electron-builder": "^22.2.0"
   }
 }
