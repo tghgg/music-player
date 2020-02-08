@@ -1,9 +1,10 @@
-const { app, BrowserWindow, ipcMain, dialog, Menu, MenuItem } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, Menu, MenuItem, Tray } = require('electron');
 const process = require('process');
 // Declare app's windows
 let mainWindow;
-// Declare app's menus
-let menu; 
+
+// Declare app menus
+let menu;
 let init_menu = [
 	// Show play history and allow user to play a past song
 	{
@@ -28,6 +29,7 @@ let init_menu = [
 		role: 'quit'
 	}
 ];
+
 // Create main window
 app.on('ready', () => {
 	menu = Menu.buildFromTemplate(init_menu);
@@ -42,8 +44,38 @@ app.on('ready', () => {
 		}
 	); 
 	mainWindow.loadFile(__dirname + '/index.html');
-	mainWindow.webContents.openDevTools();
+	//mainWindow.webContents.openDevTools();
+
+	// Minimize/Close app to tray
+	mainWindow.on('close', (event) => {
+		if (!app.isQuitting) {
+			event.preventDefault();
+			mainWindow.hide();
+			// Declare app tray
+			let tray = new Tray('/home/choppa2/Code/music-player/tray_icon.png');
+			// Create tray menu with two buttons
+			let tray_menu = Menu.buildFromTemplate([{
+				label: 'Show App',
+				click: () => {
+					mainWindow.show();
+					// Kill tray icon
+					tray.destroy();
+				}
+			}, {
+				label: 'Quit',
+				click: () => {
+					// Kill app and destroy tray icon
+					app.isQuitting = true;
+					tray.destroy();
+					app.quit();
+				}
+			}]);
+			// Set tray menu
+			tray.setContextMenu(tray_menu);
+		}
+	});
 });
+
 // Open a file picker dialog
 ipcMain.on('pick_file', (event, data) => {
 	dialog.showOpenDialog({

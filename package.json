@@ -22,9 +22,10 @@
     }
   },
   "author": "Choppa2",
+  "email": "falling_snowdin@protonmail.com",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^7.1.10",
-    "electron-builder": "^22.2.0"
+    "electron": "^7.1.11",
+    "electron-builder": "^22.3.2"
   }
 }
