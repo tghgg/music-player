@@ -22,8 +22,6 @@ document.querySelector('#filepicker').addEventListener('click', (event) => {
 ipcRenderer.on('selected_files', (event, data) => {
   // Receive back an array (or Object sometimes) of files chosen from the main process 
   let file_path = data.file_path[0];
-  // User's operating system
-  let platform = data.platform;
   let file_type = file_path.split('.')[1];
   console.log(file_type + " is the file type.");
   console.log(data[0] + " this is the music file selected.");
@@ -34,14 +32,15 @@ ipcRenderer.on('selected_files', (event, data) => {
     document.querySelector('#player').play();
     // Remove directory paths, retain only the song's name
     // Which slashes to remove depends on the platform
-    console.log(platform + ' is the platform.');
-    if (platform == 'linux') {
-      document.querySelector('#playing').innerText = file_path.split('/')[file_path.split('/').length-1];
-    } else if (platform == 'win32') {
-      document.querySelector('#playing').innerText = file_path.split('\\')[file_path.split('\\').length-1];
+    let separtor;
+    if (data.platform === 'win32') {
+      separator = '\\';
+    } else {
+      separator = '/';
     }
+    document.querySelector('#playing').innerText = file_path.split(separator)[file_path.split(separator).length-1];
     // Send back signal to set current song name
-    ipcRenderer.send('set_current_song', file_path.split('/')[file_path.split('/').length-1]);
+    ipcRenderer.send('set_current_song', file_path.split(separator)[file_path.split(separator).length-1]);
   } catch (err) {
     console.log(err);
     console.log('Failed to play music file. Are you sure the file is a valid music file type?');

@@ -15,6 +15,14 @@ let playback_history = [];
 // Global reference to the playing song
 let current_song = 'None Playing';
 
+// Global path separator 
+// between Windows and pretty everyone else
+if (process.platform === 'win32') {
+	var separator = '\\';
+} else {
+	var separator = '/';
+}
+
 // Declare app menus
 let menu;
 let init_menu = [
@@ -47,7 +55,7 @@ let init_menu = [
 		click: (menuItem, window, event) => {
 			dialog.showMessageBox({
 				title: 'About',
-				message: 'Minimal music player by Choppa2\nNode.js version: ' + process.versions.node + '; Electron version: ' + process.versions.electron + '.',
+				message: 'Music player by Choppa2\nNode.js version: ' + process.versions.node + '; Electron version: ' + process.versions.electron + '.',
 				buttons: ['Close']
 			});
 		}
@@ -80,10 +88,10 @@ function pick_file(event, data) {
 			new_history.pop();
 			new_history.splice(2, 0, new MenuItem(
 				{
-					label: file_object.filePaths[0].split('/')[file_object.filePaths[0].split('/').length-1],
+					label: file_object.filePaths[0].split(separator)[file_object.filePaths[0].split(separator).length-1],
 					click: (menuItem, window, event) => {
 						// Set the global current song 
-						current_song = file_object.filePaths[0].split('/')[file_object.filePaths[0].split('/').length-1];
+						current_song = file_object.filePaths[0].split(separator)[file_object.filePaths[0].split(separator).length-1];
 						// Play the song
 						mainWindow.webContents.send('selected_files', {file_path: file_object.filePaths, platform: process.platform});		
 					}
@@ -99,10 +107,10 @@ function pick_file(event, data) {
 			// Append song to history list under the separator
 			menu.getMenuItemById('history').submenu.append(new MenuItem(
 				{
-					label: file_object.filePaths[0].split('/')[file_object.filePaths[0].split('/').length-1],
+					label: file_object.filePaths[0].split(separator)[file_object.filePaths[0].split(separator).length-1],
 					click: (menuItem, window, event) => {
 						// Set the global current song 
-						current_song = file_object.filePaths[0].split('/')[file_object.filePaths[0].split('/').length-1];
+						current_song = file_object.filePaths[0].split(separator)[file_object.filePaths[0].split(separator).length-1];
 						// Play the song
 						mainWindow.webContents.send('selected_files', {file_path: file_object.filePaths, platform: process.platform});		
 					}
@@ -112,10 +120,10 @@ function pick_file(event, data) {
 			// Insert track at the top of the history list
 			menu.getMenuItemById('history').submenu.insert(2, new MenuItem(
 				{
-					label: file_object.filePaths[0].split('/')[file_object.filePaths[0].split('/').length-1],
+					label: file_object.filePaths[0].split(separator)[file_object.filePaths[0].split(separator).length-1],
 					click: (menuItem, window, event) => {
 						// Set the global current song (
-						current_song = file_object.filePaths[0].split('/')[file_object.filePaths[0].split('/').length-1];
+						current_song = file_object.filePaths[0].split(separator)[file_object.filePaths[0].split(separator).length-1];
 						// Play the song
 						mainWindow.webContents.send('selected_files', {file_path: file_object.filePaths, platform: process.platform});		
 					}
@@ -125,7 +133,7 @@ function pick_file(event, data) {
 
 		// Add song to history database
 		playback_history.unshift({
-			"name": file_object.filePaths[0].split('/')[file_object.filePaths[0].split('/').length-1],
+			"name": file_object.filePaths[0].split(separator)[file_object.filePaths[0].split(separator).length-1],
 			"filepath": file_object.filePaths
 		});
 
@@ -140,7 +148,7 @@ function pick_file(event, data) {
 		mainWindow.webContents.send('selected_files', {file_path: file_object.filePaths, platform: process.platform});
 		
 		// Return the song name
-		return file_object.filePaths[0].split('/')[file_object.filePaths[0].split('/').length-1]
+		return file_object.filePaths[0].split(separator)[file_object.filePaths[0].split(separator).length-1]
 	}, (err) => {
 		dialog.showMessageBox({
 			title: 'Error',
@@ -159,7 +167,7 @@ app.on('ready', () => {
 	if (data != null) {
 		// Database already exists
 		// now we populate the playback history with the songs in the history,json
-		console.log('Reading from existing playback histrory.');
+		console.log('Reading from existing playback history.');
 		playback_history = JSON.parse(data);
 		// Add the songs to init_menu
 		init_menu[0].submenu.push({ type: 'separator' });
@@ -197,7 +205,7 @@ app.on('ready', () => {
 			enableRemoteModule: false
 		}
 	); 
-	mainWindow.loadFile(__dirname + '/index.html');
+	mainWindow.loadFile(__dirname + separator + 'index.html');
 	// Open inspector
 	// mainWindow.webContents.openDevTools();
 	
@@ -209,8 +217,14 @@ app.on('ready', () => {
 			mainWindow.hide();
 			// Declare app tray
 			if (tray === null) {
-				tray = new Tray('/home/choppa2/Code/music-player/tray_icon.png');
+				tray = new Tray(__dirname + separator + 'tray_icon.png');
 				tray.setToolTip('Music Player');
+				// On Windows, bring up the context menu upon clicking the tray icon
+				if (process.platform == 'win32') {
+					tray.on('click', (event, bounds, position) => {
+						tray.popUpContextMenu();
+					});
+				}
 				// Create tray menu with two buttons
 				let tray_menu = Menu.buildFromTemplate([{
 					// Show the song being played
@@ -292,7 +306,5 @@ ipcMain.on('set_current_song', (event, data) => {
 		}]);
 		// Set tray menu
 		tray.setContextMenu(tray_menu);
-		// Set tooltip
-		tray.setToolTip('Music Player');
 	}
 });
