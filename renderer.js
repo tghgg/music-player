@@ -9,6 +9,8 @@ const { ipcRenderer} = require('electron');
 
 // Open the song picker
 document.querySelector('#filepicker').addEventListener('click', (event) => {
+  // Change focus to the audio player again
+  document.querySelector('#player').focus();
   // Prevent from refreshing the site on a form submit
   event.preventDefault();
   // Sends the file path to the main process
