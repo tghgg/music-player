@@ -74,6 +74,9 @@ let init_menu = [
 // Reusable file picker function
 function pick_file(event, data) {
 	dialog.showOpenDialog({
+		filters: [{
+			name: 'Music', extensions: ['mp3', 'mp4', 'wav', 'ogg', 'm4a']
+		}],
 		properties: ['openFile']
 	}).then((file_object) => {
 		// Add song to history
@@ -150,12 +153,7 @@ function pick_file(event, data) {
 		// Return the song name
 		return file_object.filePaths[0].split(separator)[file_object.filePaths[0].split(separator).length-1]
 	}, (err) => {
-		dialog.showMessageBox({
-			title: 'Error',
-			message: 'Failed to pick file due to ' + err + '.',
-			buttons: ['Close']
-		});
-		console.log("Failed to pick file due to: " + err);
+		dialog.showErrorBox('Error', `${err}\nFailed to pick a song file.`);
 	});
 }
 
