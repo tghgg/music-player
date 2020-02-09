@@ -1,6 +1,6 @@
 {
   "name": "music-player",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Play your music in the tray.",
   "homepage": "https://github.com/tghgg/music-player",
   "main": "main.js",
