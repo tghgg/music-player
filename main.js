@@ -154,7 +154,6 @@ function pick_file(event, data) {
 // MAIN APP
 // Create main window
 app.on('ready', () => {
-	console.log('badonka boadnuoka');
 	// Check for playback history database
 	let data = lib_data.readSync('.data', 'history'); 
 	if (data != null) {
@@ -162,7 +161,6 @@ app.on('ready', () => {
 		// now we populate the playback history with the songs in the history,json
 		console.log('Reading from existing playback histrory.');
 		playback_history = JSON.parse(data);
-
 		// Add the songs to init_menu
 		init_menu[0].submenu.push({ type: 'separator' });
 		playback_history.forEach((song) => {
