@@ -225,11 +225,15 @@ app.on('ready', () => {
 						tray.popUpContextMenu();
 					});
 				}
-				// Create tray menu with two buttons
+				// Create tray menu
 				let tray_menu = Menu.buildFromTemplate([{
 					// Show the song being played
+					// Continue the song if paused
 					label: current_song,
-					id: 'song_playing'
+					id: 'song_playing',
+					click: () => {
+						mainWindow.webContents.send('continue_song');
+					}
 				}, {
 					type: 'separator'
 				}, {
@@ -239,6 +243,12 @@ app.on('ready', () => {
 					click: () => {
 						pick_file();
 					}
+				}, {
+					label: 'Pause Song',
+					click: () => {
+						mainWindow.webContents.send('pause_song');
+					},
+					toolTip: 'Click the song name to continue playing song if paused'
 				}, {
 					label: 'Show App',
 					click: () => {
@@ -275,8 +285,12 @@ ipcMain.on('set_current_song', (event, data) => {
 		// Set a new menu with a label showing the currently playing song
 		let tray_menu = Menu.buildFromTemplate([{
 			// Show the song being played
+			// Continue the song if paused
 			label: current_song,
-			id: 'song_playing'
+			id: 'song_playing',
+			click: () => {
+				mainWindow.webContents.send('continue_song');
+			}
 		}, {
 			type: 'separator'
 		}, {
@@ -286,6 +300,12 @@ ipcMain.on('set_current_song', (event, data) => {
 			click: () => {
 				pick_file();
 			}
+		}, {
+			label: 'Pause Song',
+			click: () => {
+				mainWindow.webContents.send('pause_song');
+			},
+			toolTip: 'Click the song name to continue playing song if paused'
 		}, {
 			label: 'Show App',
 			click: () => {

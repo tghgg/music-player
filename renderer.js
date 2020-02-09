@@ -18,6 +18,7 @@ document.querySelector('#filepicker').addEventListener('click', (event) => {
 // IpcRenderer is basically Electron's helper for in-browser Javascript
 // Manipulate the DOM easily with it 
 
+// LISTENERS
 // Receive the music file chosen and play it
 ipcRenderer.on('selected_files', (event, data) => {
   // Receive back an array (or Object sometimes) of files chosen from the main process 
@@ -45,5 +46,18 @@ ipcRenderer.on('selected_files', (event, data) => {
     console.log(err);
     console.log('Failed to play music file. Are you sure the file is a valid music file type?');
     console.log('Please pick another music file.');
+  }
+});
+
+// Pause the song
+ipcRenderer.on('pause_song', (event, data) => {
+  console.log('Pause the song');
+  document.querySelector('#player').pause();
+});
+// Continue the song if paused
+ipcRenderer.on('continue_song', (event, data) => {
+  if (document.querySelector('#player').paused) {
+    console.log('Continue the song');
+    document.querySelector('#player').play();
   }
 });
