@@ -1,11 +1,13 @@
-/* 
- * In-Browser Javascript
- */
+/*
+ * Main script for the renderer process
+ * aka Javascript in the browser
+*/
 
 // Getting the ipc and remote
 // Allows this file to communicate with main.js and run main processes from this renderer
 const { ipcRenderer} = require('electron');
 
+// Open the song picker
 document.querySelector('#filepicker').addEventListener('click', (event) => {
   // Prevent from refreshing the site on a form submit
   event.preventDefault();
@@ -38,6 +40,8 @@ ipcRenderer.on('selected_files', (event, data) => {
     } else if (platform == 'win32') {
       document.querySelector('#playing').innerText = file_path.split('\\')[file_path.split('\\').length-1];
     }
+    // Send back signal to set current song name
+    ipcRenderer.send('set_current_song', file_path.split('/')[file_path.split('/').length-1]);
   } catch (err) {
     console.log(err);
     console.log('Failed to play music file. Are you sure the file is a valid music file type?');
