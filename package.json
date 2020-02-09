@@ -15,16 +15,16 @@
     "productName": "Music Player",
     "linux": {
       "target": [
-        "AppImage",
-        "rpm",
-        "snap"
-      ]
+        "AppImage"
+      ],
+      "category": "Audio"
     },
     "win": {
       "target": "NSIS"
     },
     "mac": {
-      "target": "default"
+      "target": "default",
+      "category": "public.app-category.music"
     }
   },
   "author": {
