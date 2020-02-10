@@ -8,11 +8,11 @@ My own music player made for learning Electron.
 
 ## Installation
 ### Windows
-- Download the executable file [here](https://github.com/tghgg/music-player/releases/tag/v2.0.1) and run it.
+- Download the latest executable file [here](https://github.com/tghgg/music-player/releases) and run it.
 ### Linux
-- Download the AppImage file [here](https://github.com/tghgg/music-player/releases/tag/v2.0.1) and run it.
+- Download the latest AppImage file [here](https://github.com/tghgg/music-player/releases) and run it.
 ### MacOS
 - TODO: Test the Mac binary myself.
-- Download the zip file for Mac here [here](https://github.com/tghgg/music-player/releases/tag/v2.0.1) and extract it.
+- Download the latest zip file for Mac here [here](https://github.com/tghgg/music-player/releases) and extract it.
 ## License
 Licensed under the MIT license.
