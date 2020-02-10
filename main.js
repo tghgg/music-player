@@ -3,14 +3,18 @@ const { app, BrowserWindow, ipcMain, dialog, Menu, MenuItem, Tray } = require('e
 const process = require('process');
 const fs = require('fs');
 const lib_data = require('./lib/data.js');
+// Module for creating local JSON data
+const Store = require('electron-store');
+
 // Declare app's windows
 let mainWindow;
 
 // Declare the app tray
 let tray = null;
 
-// JSON file for song history
-let playback_history = [];
+// Declare JSON file to store song history using electron-store 
+let playback_history;
+
 
 // Global reference to the playing song
 let current_song = 'None Playing';
@@ -34,18 +38,14 @@ let init_menu = [
 			label: 'Delete History',
 			click: () => {
 				// Delete playback history
+				console.log('Delete playback history');
+				playback_history.set('history', []);
+				// Reset the menu
 				let new_history = menu.getMenuItemById('history').submenu.items;
 				new_history.splice(1, new_history.length-1);
 				init_menu[0].submenu = new_history;
-				playback_history = [];
-				// Reset the menu
 				menu = Menu.buildFromTemplate(init_menu);
 				Menu.setApplicationMenu(menu);
-				lib_data.update('.data', 'history', [], (err) => {
-					if (err) {
-						dialog.showErrorBox('Error', `${err}\nError deleting playback history.`);
-					}
-				});
 			}
 		}]
 	},
@@ -65,6 +65,7 @@ let init_menu = [
 		label: 'Quit',
 		click: () => {
 			// Quit app completely instead of minimizing to tray
+			console.log('Quit app');
 			app.isQuitting = true;
 			app.quit();
 		}
@@ -83,13 +84,15 @@ function pick_file(event, data) {
 		// Delete old songs from history if list already has more than 10 items
 		if (menu.getMenuItemById('history').submenu.items.length > 11) {
 			// Pop the JSON database
-			playback_history.pop();
+			let new_history = playback_history.get('history');
+			console.log('Remove ' + new_history.pop().name + ' from playback history');
+			playback_history.set('history', new_history);
 			// Overwrite the old menu completely with a shorter new menu
 			// because programming is hard and you can't just do it 
 			// in one line
-			let new_history = menu.getMenuItemById('history').submenu.items;
-			new_history.pop();
-			new_history.splice(2, 0, new MenuItem(
+			let new_menu = menu.getMenuItemById('history').submenu.items;
+			new_menu.pop();
+			new_menu.splice(2, 0, new MenuItem(
 				{
 					label: file_object.filePaths[0].split(separator)[file_object.filePaths[0].split(separator).length-1],
 					click: (menuItem, window, event) => {
@@ -100,7 +103,7 @@ function pick_file(event, data) {
 					}
 				}
 			));
-			init_menu[0].submenu = new_history;
+			init_menu[0].submenu = new_menu;
 			Menu.setApplicationMenu(Menu.buildFromTemplate(init_menu));
 		} else if (menu.getMenuItemById('history').submenu.items.length == 1) {
 			// Add separator
@@ -135,18 +138,13 @@ function pick_file(event, data) {
 		}
 
 		// Add song to history database
-		playback_history.unshift({
+		let new_history = playback_history.get('history', []);
+		new_history.unshift({
 			"name": file_object.filePaths[0].split(separator)[file_object.filePaths[0].split(separator).length-1],
 			"filepath": file_object.filePaths
 		});
-
-		// Update database
-		lib_data.update('.data', 'history', playback_history, (err) => {
-			if (err) {
-				dialog.showErrorBox('Error', `${err}\nError updating playback history database.`);
-			}
-		});
-
+		playback_history.set('history', new_history);
+		
 		// Send back the selected files to the renderer process
 		mainWindow.webContents.send('selected_files', {file_path: file_object.filePaths, platform: process.platform});
 		
@@ -160,16 +158,22 @@ function pick_file(event, data) {
 // MAIN APP
 // Create main window
 app.on('ready', () => {
+	console.log('Create main app window');
 	// Check for playback history database
-	let data = lib_data.readSync('.data', 'history'); 
+	let data = lib_data.readSync(app.getPath("userData"), 'playback_history', true);
 	if (data != null) {
 		// Database already exists
-		// now we populate the playback history with the songs in the history,json
+		// now we populate the playback history with the songs in the playback_history.json
 		console.log('Reading from existing playback history.');
-		playback_history = JSON.parse(data);
+		playback_history = new Store({
+			name: 'playback_history'
+		});
+		playback_history.store = JSON.parse(data);
+		let history = playback_history.get('history');
 		// Add the songs to init_menu
 		init_menu[0].submenu.push({ type: 'separator' });
-		playback_history.forEach((song) => {
+		history.forEach((song) => {
+			console.log('Adding ' + song.name + ' to the history list');
 			init_menu[0].submenu.push({
 				label: song.name,
 				click: (menuItem, window, event) => {
@@ -181,13 +185,13 @@ app.on('ready', () => {
 	} else {
 		// Database doesn't exists
 		// Create the playback history database
-		lib_data.create('.data', 'history', [], (err) => {
-			if (err) {
-				dialog.showErrorBox('Error', err);
-			} else {
-				console.log('Playback history database created successfully.');
-			}
-			});
+		console.log('Create new playback history');
+		playback_history = new Store({
+			defaults: {
+				history: []
+			},
+			name: 'playback_history'
+		});
 	}
 
 	// Set the menu
@@ -211,6 +215,7 @@ app.on('ready', () => {
 	// Minimize/Close app to tray
 	mainWindow.on('close', (event) => {
 		if (!app.isQuitting) {
+			console.log('Minimize main app window to tray');
 			event.preventDefault();
 			mainWindow.hide();
 			// Declare app tray
@@ -259,6 +264,7 @@ app.on('ready', () => {
 					label: 'Quit',
 					click: () => {
 						// Kill app and destroy tray icon
+						console.log('Quit app');
 						app.isQuitting = true;
 						tray.destroy();
 						tray = null;
@@ -277,7 +283,7 @@ app.on('ready', () => {
 ipcMain.on('pick_file', pick_file);
 // Change the label showing which song is playing when a new song is played
 ipcMain.on('set_current_song', (event, data) => {
-	console.log('The current song name is: '); console.log(data);
+	console.log('The playing song is: '); console.log(data);
 	current_song = data;
 	if (tray != null) {
 		// Set a new menu with a label showing the currently playing song
@@ -316,6 +322,7 @@ ipcMain.on('set_current_song', (event, data) => {
 			label: 'Quit',
 			click: () => {
 				// Kill app and destroy tray icon
+				console.log('Quit app');
 				app.isQuitting = true;
 				tray.destroy();
 				tray = null;
