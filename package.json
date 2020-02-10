@@ -1,6 +1,6 @@
 {
   "name": "music-player",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Play your music in the tray.",
   "homepage": "https://github.com/tghgg/music-player",
   "main": "main.js",
@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "dist_m": "electron-builder -m"
   },
   "build": {
     "appId": "com.musicplayer.app",
@@ -17,7 +18,7 @@
       "target": [
         "AppImage"
       ],
-      "category": "Audio"
+      "category": "AudioVideo"
     },
     "win": {
       "target": "NSIS"
@@ -36,5 +37,8 @@
   "devDependencies": {
     "electron": "^7.1.11",
     "electron-builder": "^22.3.2"
+  },
+  "dependencies": {
+    "electron-store": "^5.1.0"
   }
 }
