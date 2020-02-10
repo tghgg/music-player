@@ -30,7 +30,7 @@ if (process.platform === 'win32') {
 
 // Declare app menus
 let menu;
-let init_menu = [
+const init_menu = [
   // Show play history and allow user to play a past song
   {
     label: 'History',
@@ -42,7 +42,7 @@ let init_menu = [
         console.log('Delete playback history');
         playback_history.set('history', []);
         // Reset the menu
-        let new_history = menu.getMenuItemById('history').submenu.items;
+        const new_history = menu.getMenuItemById('history').submenu.items;
         new_history.splice(1, new_history.length - 1);
         init_menu[0].submenu = new_history;
         menu = Menu.buildFromTemplate(init_menu);
@@ -73,25 +73,31 @@ let init_menu = [
   }
 ];
 
-// Reusable file picker function
+// Reusable song picker function
 function pick_file (event, data) {
+  console.log('Open file picker dialog to choose a new song');
   dialog.showOpenDialog({
     filters: [{
       name: 'Music', extensions: ['mp3', 'mp4', 'wav', 'ogg', 'm4a']
     }],
     properties: ['openFile']
   }).then((file_object) => {
+    // Stop if the user canceled the dialog box
+    if (file_object.canceled) {
+      console.log('Cancel file picker dialog');
+      return;
+    }
     // Add song to history
     // Delete old songs from history if list already has more than 10 items
     if (menu.getMenuItemById('history').submenu.items.length > 11) {
       // Pop the JSON database
-      let new_history = playback_history.get('history');
+      const new_history = playback_history.get('history');
       console.log('Remove ' + new_history.pop().name + ' from playback history');
       playback_history.set('history', new_history);
       // Overwrite the old menu completely with a shorter new menu
       // because programming is hard and you can't just do it
       // in one line
-      let new_menu = menu.getMenuItemById('history').submenu.items;
+      const new_menu = menu.getMenuItemById('history').submenu.items;
       new_menu.pop();
       new_menu.splice(2, 0, new MenuItem(
         {
@@ -139,7 +145,7 @@ function pick_file (event, data) {
     }
 
     // Add song to history database
-    let new_history = playback_history.get('history', []);
+    const new_history = playback_history.get('history', []);
     new_history.unshift({
       name: file_object.filePaths[0].split(separator)[file_object.filePaths[0].split(separator).length - 1],
       filepath: file_object.filePaths
@@ -161,7 +167,7 @@ function pick_file (event, data) {
 app.on('ready', () => {
   console.log('Create main app window');
   // Check for playback history database
-  let data = lib_data.readSync(app.getPath('userData'), 'playback_history', true);
+  const data = lib_data.readSync(app.getPath('userData'), 'playback_history', true);
   if (data != null) {
     // Database already exists
     // now we populate the playback history with the songs in the playback_history.json
@@ -170,7 +176,7 @@ app.on('ready', () => {
       name: 'playback_history'
     });
     playback_history.store = JSON.parse(data);
-    let history = playback_history.get('history');
+    const history = playback_history.get('history');
     // Add the songs to init_menu
     init_menu[0].submenu.push({ type: 'separator' });
     history.forEach((song) => {
@@ -230,7 +236,7 @@ app.on('ready', () => {
           });
         }
         // Create tray menu
-        let tray_menu = Menu.buildFromTemplate([{
+        const tray_menu = Menu.buildFromTemplate([{
           // Show the song being played
           // Continue the song if paused
           label: current_song,
@@ -288,7 +294,7 @@ ipcMain.on('set_current_song', (event, data) => {
   current_song = data;
   if (tray != null) {
     // Set a new menu with a label showing the currently playing song
-    let tray_menu = Menu.buildFromTemplate([{
+    const tray_menu = Menu.buildFromTemplate([{
       // Show the song being played
       // Continue the song if paused
       label: current_song,
