@@ -15,7 +15,6 @@ let tray = null;
 // Declare JSON file to store song history using electron-store 
 let playback_history;
 
-
 // Global reference to the playing song
 let current_song = 'None Playing';
 
@@ -55,7 +54,7 @@ let init_menu = [
 		click: (menuItem, window, event) => {
 			dialog.showMessageBox({
 				title: 'About',
-				message: 'Music player by Choppa2\nNode.js version: ' + process.versions.node + '; Electron version: ' + process.versions.electron + '.',
+				message: 'Music player v2.0.2 by Choppa2\nNode.js version: ' + process.versions.node + '; Electron version: ' + process.versions.electron + '.',
 				buttons: ['Close']
 			});
 		}
