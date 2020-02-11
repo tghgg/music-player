@@ -41,9 +41,13 @@ ipcRenderer.on('selected_files', (event, data) => {
     } else {
       separator = '/';
     }
-    document.querySelector('#playing').innerText = file_path.split(separator)[file_path.split(separator).length - 1];
+    // Set the current_song to the song name without its extension
+    let song_name = file_path.split(separator)[file_path.split(separator).length - 1].split('.');
+    song_name.pop();
+    song_name = song_name.join('');
+    document.querySelector('#playing').innerText = song_name;
     // Send back signal to set current song name
-    ipcRenderer.send('set_current_song', file_path.split(separator)[file_path.split(separator).length - 1]);
+    ipcRenderer.send('set_current_song', song_name);
   } catch (err) {
     console.log(err);
     console.log('Failed to play music file. Are you sure the file is a valid music file type?');
