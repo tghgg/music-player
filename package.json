@@ -5,7 +5,7 @@
   "homepage": "https://github.com/tghgg/music-player",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
+    "start": "electron --disable-gpu .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "dist_mac": "electron-builder -m",

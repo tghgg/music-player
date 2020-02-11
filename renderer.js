@@ -1,3 +1,4 @@
+'use strict';
 /*
  * Main script for the renderer process
  * aka Javascript in the browser
