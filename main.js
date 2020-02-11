@@ -1,3 +1,4 @@
+'use strict';
 // INIT
 const { app, BrowserWindow, ipcMain, dialog, Menu, MenuItem, Tray } = require('electron');
 const process = require('process');
@@ -256,6 +257,7 @@ app.on('ready', () => {
         }, {
           label: 'Pause Song',
           click: () => {
+            console.log('Pause song');
             mainWindow.webContents.send('pause_song');
           },
           toolTip: 'Click the song name to continue playing song if paused'
@@ -292,7 +294,7 @@ ipcMain.on('pick_file', pick_file);
 ipcMain.on('set_current_song', (event, data) => {
   console.log('The playing song is: '); console.log(data);
   current_song = data;
-  if (tray != null) {
+  if (tray !== null) {
     // Set a new menu with a label showing the currently playing song
     const tray_menu = Menu.buildFromTemplate([{
       // Show the song being played
@@ -314,6 +316,7 @@ ipcMain.on('set_current_song', (event, data) => {
     }, {
       label: 'Pause Song',
       click: () => {
+        console.log('Pause song');
         mainWindow.webContents.send('pause_song');
       },
       toolTip: 'Click the song name to continue playing song if paused'
