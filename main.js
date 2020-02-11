@@ -77,15 +77,18 @@ const init_menu = [
 // Reusable song picker function
 function pick_file (event, data) {
   console.log('Open file picker dialog to choose a new song');
+  console.time('Measure performance for picking new songs');
   dialog.showOpenDialog({
     filters: [{
       name: 'Music', extensions: ['mp3', 'mp4', 'wav', 'ogg', 'm4a']
     }],
     properties: ['openFile']
   }).then((file_object) => {
+    console.table(file_object);
     // Stop if the user canceled the dialog box
     if (file_object.canceled) {
       console.log('Cancel file picker dialog');
+      console.timeEnd('Measure performance for picking new songs');
       return;
     }
     // Add song to history
@@ -156,6 +159,7 @@ function pick_file (event, data) {
     // Send back the selected files to the renderer process
     mainWindow.webContents.send('selected_files', { file_path: file_object.filePaths, platform: process.platform });
 
+    console.timeEnd('Measure performance for picking new songs');
     // Return the song name
     return file_object.filePaths[0].split(separator)[file_object.filePaths[0].split(separator).length - 1];
   }, (err) => {
@@ -168,6 +172,7 @@ function pick_file (event, data) {
 app.on('ready', () => {
   console.log('Create main app window');
   // Check for playback history database
+  // TODO: Remove lib_data dependency because this can just be done with fs
   const data = lib_data.readSync(app.getPath('userData'), 'playback_history', true);
   if (data != null) {
     // Database already exists

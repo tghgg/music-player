@@ -4,7 +4,7 @@
  * aka Javascript in the browser
 */
 
-// Getting the ipc and remote
+// Getting the ipc and remote through nodeIntegration
 // Allows this file to communicate with main.js and run main processes from this renderer
 const { ipcRenderer } = require('electron');
 
@@ -27,8 +27,7 @@ ipcRenderer.on('selected_files', (event, data) => {
   // Receive back an array (or Object sometimes) of files chosen from the main process
   const file_path = data.file_path[0];
   const file_type = file_path.split('.')[1];
-  console.log(file_type + ' is the file type.');
-  console.log(data[0] + ' this is the music file selected.');
+  console.table(data);
   document.querySelector('#player').setAttribute('src', file_path);
   document.querySelector('#player').setAttribute('type', 'audio/' + file_type);
   // Play music
