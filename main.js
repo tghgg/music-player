@@ -170,6 +170,12 @@ function pick_file (event, data) {
 // MAIN APP
 // Create main window
 app.on('ready', () => {
+  if (!app.requestSingleInstanceLock()) {
+      console.log('Quit app as there is already an instance running.');
+      app.isQuitting = true;
+      app.quit();
+      return;
+  }
   console.log('Create main app window');
   // Check for playback history database
   // TODO: Remove lib_data dependency because this can just be done with fs
