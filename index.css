@@ -6,20 +6,7 @@ h1 {
 body {
   text-align: center;
   font-family: monospace;
-  background-color: black;
   text-decoration: white;
   /* overflow hides the scrollbar */ 
   overflow: hidden;
 }
-
-pre {
-  color: white;
-}
-
-.nav {
- /* background-image: url('resources/jarjit.png');
- */
-  background-size: cover;
-  background-position: center;
-}
-
