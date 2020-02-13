@@ -1,6 +1,6 @@
 {
   "name": "music-player",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "Play your music in the tray.",
   "homepage": "https://github.com/tghgg/music-player",
   "main": "main.js",
@@ -36,7 +36,7 @@
   "repository": "https://github.com/tghgg/music-player.git",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^7.1.11",
+    "electron": "^7.1.12",
     "electron-builder": "^22.3.2"
   },
   "dependencies": {

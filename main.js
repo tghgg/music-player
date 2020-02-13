@@ -221,6 +221,7 @@ app.on('ready', () => {
     {
       width: 800,
       height: 400,
+      backgroundColor: '#000',
       show: true,
       webPreferences: { nodeIntegration: true },
       enableRemoteModule: false
@@ -299,6 +300,11 @@ app.on('ready', () => {
 });
 
 // LISTENERS
+// Listen for second app instance
+app.on('second-instance', (event, args, workingDirectory) => {
+    mainWindow.show();
+    console.log('Second instance detected. Closing it...');
+});
 // Open a file picker dialog
 ipcMain.on('pick_file', pick_file);
 // Change the label showing which song is playing when a new song is played
