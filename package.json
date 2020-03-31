@@ -3,7 +3,7 @@
   "version": "2.1.0",
   "description": "Play your music in the tray.",
   "homepage": "https://github.com/tghgg/music-player",
-  "main": "main.js",
+  "main": "./src/main.js",
   "scripts": {
     "start": "electron --disable-gpu .",
     "pack": "electron-builder --dir",

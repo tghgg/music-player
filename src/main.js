@@ -2,7 +2,7 @@
 // INIT
 const { app, BrowserWindow, ipcMain, dialog, Menu, MenuItem, Tray } = require('electron');
 const process = require('process');
-const lib_data = require('./lib/data.js');
+const lib_data = require('../lib/data.js');
 // Module for creating local JSON data
 const Store = require('electron-store');
 // Path module
@@ -240,7 +240,7 @@ app.on('ready', () => {
       mainWindow.hide();
       // Declare app tray
       if (tray === null) {
-        tray = new Tray(path.join(__dirname, 'tray_icon.png'));
+        tray = new Tray(path.join(__dirname, '../assets/tray_icon.png'));
         tray.setToolTip('Music Player');
         // On Windows, bring up the context menu upon clicking the tray icon
         if (process.platform === 'win32') {
