@@ -2,7 +2,7 @@
 // INIT
 const { app, BrowserWindow, ipcMain, dialog, Menu, MenuItem, Tray } = require('electron');
 const process = require('process');
-const lib_data = require('../lib/data.js');
+const file_handler = require('../lib/data.js');
 // Module for creating local JSON data
 const Store = require('electron-store');
 // Path module
@@ -178,8 +178,8 @@ app.on('ready', () => {
   }
   console.log('Create main app window');
   // Check for playback history database
-  // TODO: Remove lib_data dependency because this can just be done with fs
-  const data = lib_data.readSync(app.getPath('userData'), 'playback_history', true);
+  // TODO: Remove file_handler dependency because this can just be done with fs
+  const data = file_handler.readSync(app.getPath('userData'), 'playback_history', true);
   if (data != null) {
     // Database already exists
     // now we populate the playback history with the songs in the playback_history.json
@@ -221,7 +221,7 @@ app.on('ready', () => {
     {
       width: 800,
       height: 400,
-      backgroundColor: '#000',
+      backgroundColor: '#1d1d1d',
       show: true,
       webPreferences: { nodeIntegration: true },
       enableRemoteModule: false

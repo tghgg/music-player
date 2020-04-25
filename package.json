@@ -1,16 +1,14 @@
 {
   "name": "music-player",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Play your music in the tray.",
   "homepage": "https://github.com/tghgg/music-player",
   "main": "./src/main.js",
   "scripts": {
-    "start": "electron --disable-gpu .",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder",
-    "dist_mac": "electron-builder -m",
-    "dist_windows": "electron-builder -w",
-    "dist_linux": "electron-builder -l"
+    "start": "electron .",
+    "pack": "electron-builder -wl",
+    "pack_windows": "electron-builder -w",
+    "pack_linux": "electron-builder -l"
   },
   "build": {
     "appId": "com.musicplayer.app",
@@ -23,23 +21,19 @@
     },
     "win": {
       "target": "NSIS"
-    },
-    "mac": {
-      "target": "default",
-      "category": "public.app-category.music"
     }
   },
   "author": {
-    "name": "Choppa2",
+    "name": "Falling Snowdin",
     "email": "falling_snowdin@protonmail.com"
   },
-  "repository": "https://github.com/tghgg/music-player.git",
+  "repository": "https://github.com/tghgg/music-player",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^7.1.12",
-    "electron-builder": "^22.3.2"
+    "electron": "^8.2.3",
+    "electron-builder": "^22.5.1"
   },
   "dependencies": {
-    "electron-store": "^5.1.0"
+    "electron-store": "^5.1.1"
   }
 }
