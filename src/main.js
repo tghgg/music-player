@@ -57,7 +57,7 @@ const init_menu = [
     click: (menuItem, window, event) => {
       dialog.showMessageBox({
         title: 'About',
-        message: 'Music player v2.0.2 by Choppa2\nNode.js version: ' + process.versions.node + '; Electron version: ' + process.versions.electron + '.',
+        message: 'Music player v2.1.2 by Choppa2\nNode.js version: ' + process.versions.node + '; Electron version: ' + process.versions.electron + '.',
         buttons: ['Close']
       });
     }
