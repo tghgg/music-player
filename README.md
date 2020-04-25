@@ -13,3 +13,4 @@ My own music player made for learning Electron.
 - Download the latest AppImage file [here](https://github.com/tghgg/music-player/releases) and run it.
 ## License
 Licensed under the MIT license.
+Godot icon is by Andrea Calabro; it is under the CC-BY-3.0 license.

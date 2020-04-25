@@ -176,6 +176,9 @@ app.on('ready', () => {
       app.quit();
       return;
   }
+
+  app.allowRendererProcessReuse = true;
+
   console.log('Create main app window');
   // Check for playback history database
   // TODO: Remove file_handler dependency because this can just be done with fs
