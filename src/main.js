@@ -55,8 +55,9 @@ const init_menu = [
   {
     label: 'About',
     click: (menuItem, window, event) => {
-      dialog.showMessageBox({
+      dialog.showMessageBox(mainWindow,{
         title: 'About',
+        type: 'info',
         message: 'Music player v2.1.2 by Choppa2\nNode.js version: ' + process.versions.node + '; Electron version: ' + process.versions.electron + '.',
         buttons: ['Close']
       });
@@ -224,6 +225,8 @@ app.on('ready', () => {
     {
       width: 800,
       height: 400,
+      minWidth: 568,
+      minHeight: 339,
       backgroundColor: '#1d1d1d',
       show: true,
       webPreferences: { nodeIntegration: true },
