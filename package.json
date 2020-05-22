@@ -15,7 +15,8 @@
     "productName": "Music Player",
     "linux": {
       "target": [
-        "AppImage"
+        "AppImage",
+        "deb"
       ],
       "category": "AudioVideo"
     },
@@ -30,7 +31,7 @@
   "repository": "https://github.com/tghgg/music-player",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^8.2.3",
+    "electron": "^8.3.0",
     "electron-builder": "^22.5.1"
   },
   "dependencies": {
