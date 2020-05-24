@@ -28,25 +28,12 @@ document.querySelector('#hider').addEventListener('click', (event) => {
 
   // Hide from the audio player down
   // Make it clean like Groove
-  if (!main.classList.contains('hide')) {
-    main.classList.add('hide');
-  } else {
-    main.classList.remove('hide');
-  }
-
+  !main.classList.contains('hide') ? main.classList.add('hide') : main.classList.remove('hide');
+  
   // Center header
-  if (!nav.classList.contains('center')) {
-    nav.classList.add('center');
-  } else {
-    nav.classList.remove('center');
-  }
+  !nav.classList.contains('center') ? nav.classList.add('center') : nav.classList.remove('center');
 
-  if (hider.innerHTML == '^') {
-    hider.innerHTML = 'v';
-  } else {
-    hider.innerHTML = '^';
-  }
-
+  hider.innerHTML == '^' ? hider.innerHTML = 'v' : hider.innerHTML = '^';
 });
 
 // IpcRenderer is basically Electron's helper for in-browser Javascript
