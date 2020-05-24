@@ -33,7 +33,7 @@ document.querySelector('#hider').addEventListener('click', (event) => {
   // Center header
   !nav.classList.contains('center') ? nav.classList.add('center') : nav.classList.remove('center');
 
-  hider.innerHTML == '^' ? hider.innerHTML = 'v' : hider.innerHTML = '^';
+  hider.innerHTML == '^' ? hider.innerHTML = '^' : hider.innerHTML = 'v';
 });
 
 // IpcRenderer is basically Electron's helper for in-browser Javascript
