@@ -220,6 +220,7 @@ app.on('ready', () => {
   // Set the menu
   menu = Menu.buildFromTemplate(init_menu);
   Menu.setApplicationMenu(menu);
+
   // Create the main app window
   mainWindow = new BrowserWindow(
     {
@@ -235,7 +236,7 @@ app.on('ready', () => {
   );
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
   // Open inspector
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   // LISTENERS
   // Minimize/Close app to tray

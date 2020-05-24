@@ -18,6 +18,32 @@ document.querySelector('#filepicker').addEventListener('click', (event) => {
   ipcRenderer.send('pick_file');
 });
 
+// Hide the music player and the choose song button
+document.querySelector('#hider').addEventListener('click', (event) => {
+  event.preventDefault();
+
+  const main = document.querySelector('.main');
+  const nav = document.querySelector('.nav');
+
+  // Hide from the audio player down
+  // Make it clean like Groove
+  console.log('hide');
+
+  if (!main.classList.contains('hide')) {
+    main.classList.add('hide');
+  } else {
+    main.classList.remove('hide');
+  }
+
+  // Center header
+  if (!nav.classList.contains('center')) {
+    nav.classList.add('center');
+  } else {
+    nav.classList.remove('center');
+  }
+
+});
+
 // IpcRenderer is basically Electron's helper for in-browser Javascript
 // Manipulate the DOM easily with it
 
@@ -46,6 +72,9 @@ ipcRenderer.on('selected_files', (event, data) => {
     song_name.pop();
     song_name = song_name.join('');
     document.querySelector('#playing').innerText = song_name;
+
+
+
     // Send back signal to set current song name
     ipcRenderer.send('set_current_song', song_name);
   } catch (err) {
