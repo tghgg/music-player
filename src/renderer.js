@@ -24,11 +24,10 @@ document.querySelector('#hider').addEventListener('click', (event) => {
 
   const main = document.querySelector('.main');
   const nav = document.querySelector('.nav');
+  const hider = document.querySelector('#hider');
 
   // Hide from the audio player down
   // Make it clean like Groove
-  console.log('hide');
-
   if (!main.classList.contains('hide')) {
     main.classList.add('hide');
   } else {
@@ -40,6 +39,12 @@ document.querySelector('#hider').addEventListener('click', (event) => {
     nav.classList.add('center');
   } else {
     nav.classList.remove('center');
+  }
+
+  if (hider.innerHTML == '^') {
+    hider.innerHTML = 'v';
+  } else {
+    hider.innerHTML = '^';
   }
 
 });
