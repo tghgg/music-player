@@ -36,10 +36,7 @@ button:active {
 }
 
 .main.hide {
-    animation-duration: 0.4s;
-    animation-name: slideOut;
-	animation-timing-function: ease-in;
-	animation-fill-mode: forwards;
+    display: none;
 }
 
 @keyframes slideOut {
